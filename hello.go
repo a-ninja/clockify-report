@@ -117,7 +117,7 @@ func getSummary(clients map[string]Client, reportType ReportType) {
 	url := "https://reports.api.clockify.me/v1/workspaces/" + workspaceId + "/reports/summary"
 	// var str = `{"dateRangeStart":"2024-03-31T00:00:00.000Z","dateRangeEnd":"2024-04-06T23:59:59.999Z","sortOrder":"ASCENDING","description":"","rounding":false,"withoutDescription":false,"amounts":["EARNED"],"amountShown":"EARNED","zoomLevel":"WEEK","userLocale":"en-US","customFields":null,"userCustomFields":null,"kioskIds":[],"clients":{"contains":"CONTAINS","ids":["64026d86264092281bfbcaa6","64bf322e40486b3fa56d19fe"],"status":"ACTIVE","numberOfDeleted":0},"summaryFilter":{"sortColumn":"GROUP","groups":["PROJECT","USER"],"summaryChartType":"BILLABILITY"}}`
 	// str = `{"dateRangeStart":"2024-03-31T00:00:00.000Z","dateRangeEnd":"2024-04-06T23:59:59.999Z","sortOrder":"ASCENDING","description":"","rounding":false,"withoutDescription":false,"amounts":["EARNED"],"amountShown":"EARNED","zoomLevel":"WEEK","userLocale":"en-US","customFields":null,"userCustomFields":null,"kioskIds":[],"clients":{"contains":"CONTAINS","ids":["64026d86264092281bfbcaa6","64bf322e40486b3fa56d19fe","64026d8b2b547d4bb3880da7","640a8179ef9f495fb7aa90b9"],"status":"ACTIVE","numberOfDeleted":0},"summaryFilter":{"sortColumn":"GROUP","groups":["PROJECT","USER"],"summaryChartType":"BILLABILITY"}}`
-	var str = `{"dateRangeStart":` + startDate + `,"dateRangeEnd":` + endDate + `,"sortOrder":"ASCENDING","description":"","rounding":false,"withoutDescription":false,"amounts":["EARNED"],"amountShown":"EARNED","zoomLevel":"WEEK","userLocale":"en-US","customFields":null,"userCustomFields":null,"kioskIds":[],"clients":{"contains":"CONTAINS","ids":["64026d86264092281bfbcaa6","64bf322e40486b3fa56d19fe","64026d8b2b547d4bb3880da7","640a8179ef9f495fb7aa90b9"],"status":"ACTIVE","numberOfDeleted":0},"summaryFilter":{"sortColumn":"GROUP","groups":["CLIENT","PROJECT","USER"],"summaryChartType":"BILLABILITY"}}`
+	var str = `{"dateRangeStart":` + startDate + `,"dateRangeEnd":` + endDate + `,"sortOrder":"ASCENDING","description":"","rounding":false,"withoutDescription":false,"amounts":["EARNED"],"amountShown":"EARNED","zoomLevel":"WEEK","userLocale":"en-US","customFields":null,"userCustomFields":null,"kioskIds":[],"clients":{"contains":"CONTAINS","ids":["64026d86264092281bfbcaa6","64bf322e40486b3fa56d19fe","64026d8b2b547d4bb3880da7","640a8179ef9f495fb7aa90b9","659383608f580f174cafe8fa"],"status":"ACTIVE","numberOfDeleted":0},"summaryFilter":{"sortColumn":"GROUP","groups":["CLIENT","PROJECT","USER"],"summaryChartType":"BILLABILITY"}}`
 
 	var jsonStr = []byte(str)
 
@@ -211,6 +211,6 @@ func getSummary(clients map[string]Client, reportType ReportType) {
 	if err := w.WriteAll(data); err != nil {
 		fmt.Println("error writing record to file", err)
 	}
-	fmt.Println("\nReport has been exported to", file.Name())
+	fmt.Println("\n ================Report has been exported to", file.Name())
 
 }
