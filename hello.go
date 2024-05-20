@@ -91,6 +91,7 @@ func main() {
 	startDayForWeeklyReport := endDay.AddDate(0, 0, -6).Format(layout)
 	// fmt.Println("endDay:>", endDay, ", day=", weekDay, ", startDay=", startDayForWeeklyReport)
 	startDayForMonthlyReport := origEndDay.AddDate(0, 0, 0-day+1).Format(layout)
+	// startDayForMonthlyReport = "\"2024-04-01T00:00:00.000Z\""
 	// fmt.Println("endDay:>", endDay, ", day=", weekDay, ", startDay=", startDayForMonthlyReport)
 	weeklyReport := ReportType{ReportName: "last-week-from-Sun-Sat", StartDate: startDayForWeeklyReport, EndDate: endDate}
 	monthlyReport := ReportType{ReportName: "monthly", StartDate: startDayForMonthlyReport, EndDate: endDate}
@@ -100,6 +101,10 @@ func main() {
 		var reportTypes [2]ReportType
 		reportTypes[0] = weeklyReport
 		reportTypes[1] = monthlyReport
+		for _, client := range clients {
+			fmt.Println("Client:", client.name, client.id)
+		}
+
 		for _, reportType := range reportTypes {
 			fmt.Println("\nendDate:>", reportType.EndDate, ", startDate", reportType.StartDate, ", reportType", reportType.ReportName)
 			getSummary(clients, reportType)
@@ -114,10 +119,24 @@ func getSummary(clients map[string]Client, reportType ReportType) {
 	reportName := reportType.ReportName
 
 	workspaceId := getWorkspaceId()
+	//TODO: there should be a better way to create array of strings
+	var clientIds string = `[`
+	for _, ptClient := range clients {
+		if clientIds != `[` {
+			clientIds = clientIds + `,`
+		}
+		clientIds = clientIds + `"` + ptClient.id + `"`
+	}
+	clientIds = clientIds + `]`
+	// clientIds := []string{"64026d86264092281bfbcaa6", "64bf322e40486b3fa56d19fe", "64026d8b2b547d4bb3880da7", "640a8179ef9f495fb7aa90b9", "659383608f580f174cafe8fa"}
+	// clientIdStr, err := json.Marshal(clientIds)
+	// fmt.Println("clientIds:", clientIds)
+	// clientIds1 := ["64bf322e40486b3fa56d19fe","64026d86264092281bfbcaa6","640a8179ef9f495fb7aa90b9","64026d8b2b547d4bb3880da7","659383608f580f174cafe8fa"]
+
 	url := "https://reports.api.clockify.me/v1/workspaces/" + workspaceId + "/reports/summary"
 	// var str = `{"dateRangeStart":"2024-03-31T00:00:00.000Z","dateRangeEnd":"2024-04-06T23:59:59.999Z","sortOrder":"ASCENDING","description":"","rounding":false,"withoutDescription":false,"amounts":["EARNED"],"amountShown":"EARNED","zoomLevel":"WEEK","userLocale":"en-US","customFields":null,"userCustomFields":null,"kioskIds":[],"clients":{"contains":"CONTAINS","ids":["64026d86264092281bfbcaa6","64bf322e40486b3fa56d19fe"],"status":"ACTIVE","numberOfDeleted":0},"summaryFilter":{"sortColumn":"GROUP","groups":["PROJECT","USER"],"summaryChartType":"BILLABILITY"}}`
 	// str = `{"dateRangeStart":"2024-03-31T00:00:00.000Z","dateRangeEnd":"2024-04-06T23:59:59.999Z","sortOrder":"ASCENDING","description":"","rounding":false,"withoutDescription":false,"amounts":["EARNED"],"amountShown":"EARNED","zoomLevel":"WEEK","userLocale":"en-US","customFields":null,"userCustomFields":null,"kioskIds":[],"clients":{"contains":"CONTAINS","ids":["64026d86264092281bfbcaa6","64bf322e40486b3fa56d19fe","64026d8b2b547d4bb3880da7","640a8179ef9f495fb7aa90b9"],"status":"ACTIVE","numberOfDeleted":0},"summaryFilter":{"sortColumn":"GROUP","groups":["PROJECT","USER"],"summaryChartType":"BILLABILITY"}}`
-	var str = `{"dateRangeStart":` + startDate + `,"dateRangeEnd":` + endDate + `,"sortOrder":"ASCENDING","description":"","rounding":false,"withoutDescription":false,"amounts":["EARNED"],"amountShown":"EARNED","zoomLevel":"WEEK","userLocale":"en-US","customFields":null,"userCustomFields":null,"kioskIds":[],"clients":{"contains":"CONTAINS","ids":["64026d86264092281bfbcaa6","64bf322e40486b3fa56d19fe","64026d8b2b547d4bb3880da7","640a8179ef9f495fb7aa90b9","659383608f580f174cafe8fa"],"status":"ACTIVE","numberOfDeleted":0},"summaryFilter":{"sortColumn":"GROUP","groups":["CLIENT","PROJECT","USER"],"summaryChartType":"BILLABILITY"}}`
+	var str = `{"dateRangeStart":` + startDate + `,"dateRangeEnd":` + endDate + `,"sortOrder":"ASCENDING","description":"","rounding":false,"withoutDescription":false,"amounts":["EARNED"],"amountShown":"EARNED","zoomLevel":"WEEK","userLocale":"en-US","customFields":null,"userCustomFields":null,"kioskIds":[],"clients":{"contains":"CONTAINS","ids":` + clientIds + `,"status":"ACTIVE","numberOfDeleted":0},"summaryFilter":{"sortColumn":"GROUP","groups":["CLIENT","PROJECT","USER"],"summaryChartType":"BILLABILITY"}}`
 
 	var jsonStr = []byte(str)
 
